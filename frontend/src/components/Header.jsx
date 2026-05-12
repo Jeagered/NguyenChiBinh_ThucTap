@@ -168,7 +168,7 @@ function NavBar() {
         </nav>
 
         <div className="flex items-center gap-4 text-slate-200">
-          <Link to="/products" className="hidden text-slate-200 no-underline hover:text-orange-400 sm:block" aria-label="Tìm kiếm">
+          <Link to="/products?focusSearch=true" className="hidden text-slate-200 no-underline hover:text-orange-400 sm:block" aria-label="Tìm kiếm">
             <SearchIcon />
           </Link>
 

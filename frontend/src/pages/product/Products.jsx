@@ -1,4 +1,4 @@
-﻿﻿import { useEffect, useMemo, useState } from 'react';
+﻿﻿import { useEffect, useMemo, useState, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -57,7 +57,7 @@ function ProductCard({ product }) {
       } else {
         alert(data.message || 'Lỗi thêm giỏ hàng');
       }
-    } catch(err) {
+    } catch (err) {
       alert('Lỗi kết nối');
     }
   };
@@ -141,13 +141,26 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // State và Ref cho ô tìm kiếm
+  const searchParamValue = searchParams.get('search') || '';
+  const [searchQuery, setSearchQuery] = useState(searchParamValue);
+  const searchInputRef = useRef(null);
+
   const page = Math.max(Number(searchParams.get('page')) || 1, 1);
   const selectedCategory = searchParams.get('category') || '';
 
   const selectedCategoryName = useMemo(() => {
+    if (searchParamValue) return `Kết quả tìm kiếm: "${searchParamValue}"`;
     if (!selectedCategory) return 'Tất cả sản phẩm';
     return categories.find((category) => category._id === selectedCategory)?.name || 'Danh mục sản phẩm';
-  }, [categories, selectedCategory]);
+  }, [categories, selectedCategory, searchParamValue]);
+
+  // Tự động focus vào ô tìm kiếm khi click từ Header
+  useEffect(() => {
+    if (searchParams.get('focusSearch') === 'true' && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let ignore = false;
@@ -185,6 +198,8 @@ export default function Products() {
           limit: String(PRODUCTS_PER_PAGE),
         });
         if (selectedCategory) params.set('category', selectedCategory);
+      if (searchParamValue) params.set('keyword', searchParamValue);
+      if (searchParamValue) params.set('search', searchParamValue); // Truyền thêm 'search' đề phòng Backend dùng key này
 
         const response = await fetch(`${API_URL}/products?${params.toString()}`, {
           signal: controller.signal,
@@ -211,11 +226,27 @@ export default function Products() {
     fetchProducts();
 
     return () => controller.abort();
-  }, [page, selectedCategory]);
+  }, [page, selectedCategory, searchParamValue]);
+
+  // Xử lý khi nhấn nút Tìm kiếm hoặc Enter
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const nextParams = new URLSearchParams(searchParams);
+    if (searchQuery.trim()) {
+      nextParams.set('search', searchQuery.trim());
+    } else {
+      nextParams.delete('search');
+    }
+    nextParams.delete('page'); // Reset về trang 1 khi tìm kiếm
+    nextParams.delete('focusSearch'); // Bỏ focusSearch khỏi URL để làm sạch đường dẫn
+    setSearchParams(nextParams);
+  };
 
   const updateFilter = (categoryId) => {
-    const nextParams = new URLSearchParams();
+    const nextParams = new URLSearchParams(searchParams);
     if (categoryId) nextParams.set('category', categoryId);
+    else nextParams.delete('category');
+    nextParams.delete('page');
     setSearchParams(nextParams);
   };
 
@@ -229,7 +260,17 @@ export default function Products() {
     setSearchParams(nextParams);
   };
 
-  const hasProducts = products.length > 0;
+  // Lọc sản phẩm ở phía client (giống với cách làm ở trang Quản lý Người dùng)
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return products;
+    const lowerQuery = searchQuery.trim().toLowerCase();
+    return products.filter((product) => 
+      (product.name && product.name.toLowerCase().includes(lowerQuery)) ||
+      (product.sku && product.sku.toLowerCase().includes(lowerQuery))
+    );
+  }, [products, searchQuery]);
+
+  const hasProducts = filteredProducts.length > 0;
 
   return (
     <div className="min-h-screen bg-slate-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] bg-[size:20px_20px]">
@@ -253,7 +294,25 @@ export default function Products() {
               <p className="m-0 text-sm font-black uppercase tracking-wide text-slate-500">Danh mục đang xem</p>
               <h2 className="m-0 mt-2 text-2xl font-black text-slate-950">{selectedCategoryName}</h2>
             </div>
-            <CategoryFilter categories={categories} selectedCategory={selectedCategory} onChange={updateFilter} />
+
+            <div className="flex flex-col lg:flex-row gap-4 w-full lg:w-auto">
+              {/* Ô tìm kiếm */}
+              <form onSubmit={handleSearchSubmit} className="flex w-full lg:w-72">
+                <input
+                  type="text"
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Nhập tên sản phẩm..."
+                  className="w-full rounded-l-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                />
+                <button type="submit" className="rounded-r-md bg-orange-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-orange-600">
+                  Tìm
+                </button>
+              </form>
+
+              <CategoryFilter categories={categories} selectedCategory={selectedCategory} onChange={updateFilter} />
+            </div>
           </div>
 
           {loading && (
@@ -279,7 +338,7 @@ export default function Products() {
           {!loading && !error && hasProducts && (
             <>
               <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-                {products.slice(0, PRODUCTS_PER_PAGE).map((product) => (
+                {filteredProducts.slice(0, PRODUCTS_PER_PAGE).map((product) => (
                   <ProductCard key={product._id || product.slug} product={product} />
                 ))}
               </div>

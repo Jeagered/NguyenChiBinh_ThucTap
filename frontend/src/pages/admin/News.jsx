@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css'; // Import CSS của thư viện
+import RichTextEditor from '../../components/RichTextEditor';
 
 const getNewsImage = (image) => {
   if (!image) return 'https://via.placeholder.com/80';
@@ -25,11 +24,7 @@ const News = () => {
 
   const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:5000/api/news', {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -40,12 +35,17 @@ const News = () => {
       } else {
         setError(data.message || 'Failed to fetch news');
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred while fetching news');
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(fetchNews, 0);
+    return () => window.clearTimeout(timer);
+  }, [fetchNews]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +55,7 @@ const News = () => {
     });
   };
 
-  const handleQuillChange = (value) => {
+  const handleEditorChange = (value) => {
     setFormData(prev => ({ ...prev, content: value }));
   };
 
@@ -84,7 +84,7 @@ const News = () => {
         const data = await response.json();
         alert(data.message || 'Failed to delete');
       }
-    } catch (err) {
+    } catch {
       alert('Error deleting news');
     }
   };
@@ -110,7 +110,7 @@ const News = () => {
         const data = await response.json();
         alert(data.message || 'Failed to save');
       }
-    } catch (err) {
+    } catch {
       alert('Error saving news');
     }
   };
@@ -157,8 +157,12 @@ const News = () => {
           </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-700">Content</label>
-                <div className="mt-1 bg-white rounded-md border border-slate-300">
-                  <ReactQuill theme="snow" value={formData.content} onChange={handleQuillChange} className="h-64 mb-12" />
+                <div className="mt-1">
+                  <RichTextEditor
+                    value={formData.content}
+                    onChange={handleEditorChange}
+                    placeholder="Nhap noi dung tin tuc..."
+                  />
                 </div>
               </div>
               <div>

@@ -269,3 +269,62 @@ public class Homepage : MonoBehaviour
             Console.WriteLine("i is not less than 10");
         }
     }
+
+    public void ResearchResults(int a, int b, int c)
+    {
+        if(a > b && a > c)
+        {
+            Console.WriteLine("a is the greatest");
+        }
+        else if(b > a && b > c)
+        {
+            Console.WriteLine("b is the greatest");
+        }
+        else if(c > a && c > b)
+        {
+            Console.WriteLine("c is the greatest");
+        }
+        else
+        {
+            Console.WriteLine("There is a tie for the greatest value");
+        }
+    }
+
+    void news()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            for(int j = 0; j < 5; j++)
+            {
+                Console.WriteLine("i: " + i + ", j: " + j);
+            }
+        }
+    }
+
+    private void Start()
+    {
+        IfElseExample2(10);
+        SwitchCaseExample(10);
+
+    }
+
+    private Image img;
+    void awake()
+    {
+        Instance = this;
+        img = GetComponent<Image>();
+    }
+
+    public static IEnumerator (float time)
+    {
+        gameObject.SetActive(true);
+        float s = 0f
+        while(s < 1f)
+        {
+            s += unscaledDeltaTime / time;
+            img.colr = new Color(0,0,0,s);
+            yield return null;
+        }
+    }
+
+    

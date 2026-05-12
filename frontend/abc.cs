@@ -141,3 +141,10 @@ public class abc {
         }
     }
 }
+
+public void SwitchExample(int i = 0)
+    {
+
+    }
+
+    pub

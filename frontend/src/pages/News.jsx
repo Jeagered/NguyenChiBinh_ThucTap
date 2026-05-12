@@ -18,7 +18,7 @@ function getImageUrl(image) {
 const stripHtml = (html) => {
   if (!html) return '';
   const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || "";
+  return (doc.body.textContent || '').replace(/\u00a0/g, ' ').trim();
 };
 
 export default function NewsPage() {
@@ -39,7 +39,7 @@ export default function NewsPage() {
         } else {
           setError(data.message || 'Không thể tải danh sách tin tức.');
         }
-      } catch (err) {
+      } catch {
         setError('Lỗi kết nối đến máy chủ.');
       } finally {
         setLoading(false);
@@ -88,7 +88,7 @@ export default function NewsPage() {
                 <Link
                   key={article._id}
                   to={`/news/${article.slug || article._id}`}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-white bg-white/90 backdrop-blur-md shadow-sm no-underline transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10"
+                  className="group flex flex-col rounded-xl border border-white bg-white/90 backdrop-blur-md shadow-sm no-underline transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10"
                 >
                   <div className="aspect-[16/10] overflow-hidden bg-slate-100">
                     <img
@@ -98,10 +98,10 @@ export default function NewsPage() {
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-6">
-                    <h2 className="mb-3 text-xl font-black leading-tight text-slate-900 transition-colors group-hover:text-orange-600 line-clamp-2">
+                    <h2 className="mb-3 break-words text-xl font-black leading-[1.35] text-slate-900 transition-colors group-hover:text-orange-600">
                       {article.title}
                     </h2>
-                    <p className="mb-6 flex-1 text-sm font-medium leading-relaxed text-slate-600 line-clamp-3">
+                    <p className="mb-6 flex-1 break-words text-sm font-medium leading-7 text-slate-600">
                       {stripHtml(article.content)}
                     </p>
                     <div className="mt-auto flex items-center text-sm font-black uppercase tracking-wide text-orange-500">
