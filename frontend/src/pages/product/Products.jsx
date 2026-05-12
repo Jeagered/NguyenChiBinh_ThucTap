@@ -35,7 +35,7 @@ function ProductCard({ product }) {
   const displayPrice = hasSalePrice ? salePrice : price;
   const productUrl = `/products/${product.slug || product._id}`;
 
-  const handleAddToCart = async (e) => {
+  const handleAddToCart = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
       window.location.href = '/login';
@@ -57,7 +57,7 @@ function ProductCard({ product }) {
       } else {
         alert(data.message || 'Lỗi thêm giỏ hàng');
       }
-    } catch (err) {
+    } catch {
       alert('Lỗi kết nối');
     }
   };
@@ -133,6 +133,23 @@ function CategoryFilter({ categories, selectedCategory, onChange }) {
   );
 }
 
+function SortFilter({ selectedSort, onChange }) {
+  return (
+    <div aria-label="Sắp xếp sản phẩm" className="shrink-0 w-full lg:w-auto">
+      <select
+        value={selectedSort}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-11 w-full lg:w-64 cursor-pointer appearance-none rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-black uppercase tracking-wide text-slate-700 outline-none transition hover:border-orange-500 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15"
+      >
+        <option value="-createdAt">Ngày tạo gần - xa</option>
+        <option value="createdAt">Ngày tạo xa - gần</option>
+        <option value="price">Giá thấp - cao</option>
+        <option value="-price">Giá cao - thấp</option>
+      </select>
+    </div>
+  );
+}
+
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState([]);
@@ -148,6 +165,7 @@ export default function Products() {
 
   const page = Math.max(Number(searchParams.get('page')) || 1, 1);
   const selectedCategory = searchParams.get('category') || '';
+  const selectedSort = searchParams.get('sort') || '-createdAt';
 
   const selectedCategoryName = useMemo(() => {
     if (searchParamValue) return `Kết quả tìm kiếm: "${searchParamValue}"`;
@@ -198,6 +216,7 @@ export default function Products() {
           limit: String(PRODUCTS_PER_PAGE),
         });
         if (selectedCategory) params.set('category', selectedCategory);
+      if (selectedSort) params.set('sort', selectedSort);
       if (searchParamValue) params.set('keyword', searchParamValue);
       if (searchParamValue) params.set('search', searchParamValue); // Truyền thêm 'search' đề phòng Backend dùng key này
 
@@ -226,7 +245,7 @@ export default function Products() {
     fetchProducts();
 
     return () => controller.abort();
-  }, [page, selectedCategory, searchParamValue]);
+  }, [page, selectedCategory, selectedSort, searchParamValue]);
 
   // Xử lý khi nhấn nút Tìm kiếm hoặc Enter
   const handleSearchSubmit = (e) => {
@@ -246,6 +265,14 @@ export default function Products() {
     const nextParams = new URLSearchParams(searchParams);
     if (categoryId) nextParams.set('category', categoryId);
     else nextParams.delete('category');
+    nextParams.delete('page');
+    setSearchParams(nextParams);
+  };
+
+  const updateSort = (sortValue) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (sortValue && sortValue !== '-createdAt') nextParams.set('sort', sortValue);
+    else nextParams.delete('sort');
     nextParams.delete('page');
     setSearchParams(nextParams);
   };
@@ -310,6 +337,8 @@ export default function Products() {
                   Tìm
                 </button>
               </form>
+
+              <SortFilter selectedSort={selectedSort} onChange={updateSort} />
 
               <CategoryFilter categories={categories} selectedCategory={selectedCategory} onChange={updateFilter} />
             </div>

@@ -31,7 +31,7 @@ export default function NewsPage() {
       try {
         const res = await fetch(`${API_URL}/news`);
         const data = await res.json();
-        
+
         if (data.success) {
           // Chỉ lấy các bài viết có trạng thái 'published'
           const published = (data.data || []).filter(item => item.status === 'published');
@@ -98,10 +98,10 @@ export default function NewsPage() {
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-6">
-                    <h2 className="mb-3 break-words text-xl font-black leading-[1.35] text-slate-900 transition-colors group-hover:text-orange-600">
+                    <h2 className="mb-3 line-clamp-2 break-words text-xl font-black leading-[1.35] text-slate-900 transition-colors group-hover:text-orange-600">
                       {article.title}
                     </h2>
-                    <p className="mb-6 flex-1 break-words text-sm font-medium leading-7 text-slate-600">
+                    <p className="mb-6 line-clamp-3 break-words text-sm font-medium leading-7 text-slate-600">
                       {stripHtml(article.content)}
                     </p>
                     <div className="mt-auto flex items-center text-sm font-black uppercase tracking-wide text-orange-500">
@@ -114,7 +114,6 @@ export default function NewsPage() {
           )}
         </section>
       </main>
-
       <Footer />
     </div>
   );

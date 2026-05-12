@@ -1,55 +1,41 @@
-import Editor, {
-  BtnBold,
-  BtnBulletList,
-  BtnClearFormatting,
-  BtnItalic,
-  BtnLink,
-  BtnNumberedList,
-  BtnRedo,
-  BtnStrikeThrough,
-  BtnStyles,
-  BtnUnderline,
-  BtnUndo,
-  Separator,
-  Toolbar,
-  createButton
-} from 'react-simple-wysiwyg';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
-const BtnAlignLeft = createButton('Canh trai', 'L', 'justifyLeft');
-const BtnAlignCenter = createButton('Canh giua', 'C', 'justifyCenter');
-const BtnAlignRight = createButton('Canh phai', 'R', 'justifyRight');
+// Cấu hình các modules cho editor
+const modules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
+
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+    [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+    [{ 'direction': 'rtl' }],                         // text direction
+
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+    
+    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+
+    ['link', 'image', 'video'],
+
+    ['clean']                                         // remove formatting button
+  ],
+};
+
+// Cấu hình các formats
+const formats = [
+  'header', 'font', 'size',
+  'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block',
+  'list', 'bullet', 'indent',
+  'link', 'image', 'video',
+  'color', 'background', 'align', 'script', 'direction'
+];
 
 export default function RichTextEditor({ value, onChange, placeholder }) {
   return (
-    <Editor
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      placeholder={placeholder}
-      containerProps={{
-        className: 'rsw-editor min-h-[320px] overflow-hidden rounded-md border border-slate-300 bg-white'
-      }}
-    >
-      <Toolbar>
-        <BtnUndo />
-        <BtnRedo />
-        <Separator />
-        <BtnStyles />
-        <Separator />
-        <BtnBold />
-        <BtnItalic />
-        <BtnUnderline />
-        <BtnStrikeThrough />
-        <Separator />
-        <BtnAlignLeft />
-        <BtnAlignCenter />
-        <BtnAlignRight />
-        <Separator />
-        <BtnBulletList />
-        <BtnNumberedList />
-        <Separator />
-        <BtnLink />
-        <BtnClearFormatting />
-      </Toolbar>
-    </Editor>
+    <ReactQuill theme="snow" value={value || ''} onChange={onChange} modules={modules} formats={formats} placeholder={placeholder} />
   );
 }

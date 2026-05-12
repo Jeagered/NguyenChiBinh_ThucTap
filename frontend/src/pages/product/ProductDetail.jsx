@@ -22,6 +22,12 @@ function formatPrice(value) {
   }).format(Number(value || 0));
 }
 
+// Hàm làm sạch HTML, loại bỏ các thuộc tính style không mong muốn
+const sanitizeContent = (html) => {
+  if (!html) return '';
+  return html.replace(/style="[^"]*"/g, '');
+};
+
 export default function ProductDetail() {
   const { idOrSlug } = useParams();
   const navigate = useNavigate();
@@ -113,6 +119,18 @@ export default function ProductDetail() {
   const displayPrice = hasSalePrice ? salePrice : price;
   const allImages = Array.isArray(product.images) && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
 
+  const handlePrevImage = () => {
+    const currentIndex = allImages.indexOf(mainImage);
+    const prevIndex = currentIndex <= 0 ? allImages.length - 1 : currentIndex - 1;
+    setMainImage(allImages[prevIndex]);
+  };
+
+  const handleNextImage = () => {
+    const currentIndex = allImages.indexOf(mainImage);
+    const nextIndex = currentIndex >= allImages.length - 1 ? 0 : currentIndex + 1;
+    setMainImage(allImages[nextIndex]);
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] bg-[size:20px_20px]">
       <Header variant="compact" />
@@ -121,8 +139,27 @@ export default function ProductDetail() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 xl:gap-x-16">
             {/* Phần Hình Ảnh */}
             <div className="flex flex-col">
-              <div className="aspect-square w-full overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md border border-white shadow-sm flex items-center justify-center p-4">
+              <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md border border-white shadow-sm flex items-center justify-center p-4 group">
                 <img src={getProductImage(mainImage)} alt={product.name} className="h-full w-full object-contain object-center sm:rounded-lg" />
+                
+                {allImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={handlePrevImage}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-slate-800 shadow-md backdrop-blur-md transition-all hover:bg-orange-500 hover:text-white opacity-0 group-hover:opacity-100"
+                      aria-label="Ảnh trước"
+                    >
+                      &#10094;
+                    </button>
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-slate-800 shadow-md backdrop-blur-md transition-all hover:bg-orange-500 hover:text-white opacity-0 group-hover:opacity-100"
+                      aria-label="Ảnh tiếp theo"
+                    >
+                      &#10095;
+                    </button>
+                  </>
+                )}
               </div>
               <div className="mt-4 w-full">
                 <div className="flex gap-4 overflow-x-auto pb-2" aria-orientation="horizontal" role="tablist">
@@ -147,12 +184,13 @@ export default function ProductDetail() {
 
             {/* Phần Thông Tin */}
             <div className="mt-10 px-4 sm:px-0 lg:mt-0">
-              <h1 className="text-3xl font-black tracking-tight text-slate-900">{product.name}</h1>
+              <h1 className="text-3xl font-black tracking-tight text-slate-900">Tên sản phẩm: {product.name}</h1>
               <div className="mt-3">
-                <p className="text-3xl font-black tracking-tight text-orange-600">{formatPrice(displayPrice)}</p>
+                <p className="text-2xl font-black tracking-tight text-red-600">Giá: {formatPrice(displayPrice)}</p>
                 {hasSalePrice && <p className="mt-1 text-lg font-bold text-slate-400 line-through">{formatPrice(price)}</p>}
               </div>
-              <div className="mt-8 flex gap-4">
+              <h2 className="text-xl font-bold text-slate-900 mt-4">Tồn kho: {product.stock}</h2>
+                <div className="mt-8 flex gap-4">
                 <div className="flex items-center border border-slate-300 rounded-md">
                   <button type="button" className="px-4 py-2 text-slate-600 hover:text-orange-500 font-bold" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
                   <span className="px-4 font-bold text-slate-900">{quantity}</span>
@@ -163,16 +201,19 @@ export default function ProductDetail() {
                 </button>
               </div>
               <div className="mt-8 border-t border-slate-200 pt-8">
-                <h2 className="text-sm font-black text-slate-900 uppercase">Thông tin thêm</h2>
+                <h2 className="text-xl font-black text-slate-900 uppercase">Thông tin thêm</h2>
                 <div className="mt-4 prose prose-sm text-slate-500 max-w-none">
                   <ul role="list" className="space-y-2">
                     <li>Danh mục: <span className="font-semibold text-slate-700">{product.category?.name}</span></li>
                     {product.sku && <li>SKU: <span className="font-semibold text-slate-700">{product.sku}</span></li>}
                   </ul>
                   <div className="mt-6 pt-6 border-t border-slate-100 text-base text-slate-700 leading-relaxed whitespace-pre-line">
-                    <h3 className="text-sm font-bold text-slate-900 uppercase mb-3">Mô tả sản phẩm</h3>
-                    <div className="rounded-2xl border border-white bg-white/80 backdrop-blur-md p-6 shadow-sm">
-                      <p className="break-words m-0">{product.description || product.shortDescription || 'Chưa có mô tả.'}</p>
+                    <h3 className="text-xl font-bold text-slate-900 uppercase mb-3">Mô tả sản phẩm</h3>
+                    <div className="rounded-2xl border border-white bg-white/80 backdrop-blur-md p-6 shadow-sm prose prose-slate max-w-none prose-img:rounded-xl prose-a:text-orange-600 hover:prose-a:text-orange-700">
+                      <div
+                        style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeContent(product.description || product.shortDescription) || '<p>Chưa có mô tả.</p>' }}
+                      />
                     </div>
                   </div>
                 </div>

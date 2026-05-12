@@ -199,12 +199,12 @@ const Products = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Products</h1>
+        <h1 className="text-2xl font-bold text-slate-800">Sản Phẩm</h1>
         <button 
           onClick={() => { resetForm(); setShowForm(true); }}
           className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded shadow"
         >
-          Add Product
+          Thêm sản phẩm mới
         </button>
       </div>
 
@@ -214,7 +214,7 @@ const Products = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700">Name</label>
+                <label className="block text-sm font-medium text-slate-700">Tên</label>
                 <input type="text" name="name" value={formData.name} onChange={handleInputChange} required className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500" />
               </div>
               <div>
@@ -226,11 +226,11 @@ const Products = () => {
                 <input type="text" name="sku" value={formData.sku} onChange={handleInputChange} className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700">Price</label>
+                <label className="block text-sm font-medium text-slate-700">Giá</label>
                 <input type="number" name="price" value={formData.price} onChange={handleInputChange} required min="0" step="0.01" className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700">Sale Price (Giá KM)</label>
+                <label className="block text-sm font-medium text-slate-700">Sale (Giá KM)</label>
                 <input type="number" name="salePrice" value={formData.salePrice} onChange={handleInputChange} min="0" step="0.01" className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500" />
               </div>
               <div>
@@ -238,9 +238,9 @@ const Products = () => {
                 <input type="number" name="stock" value={formData.stock} onChange={handleInputChange} required min="0" className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700">Category</label>
+                <label className="block text-sm font-medium text-slate-700">Danh mục</label>
                 <select name="category" value={formData.category} onChange={handleInputChange} required className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500">
-                  <option value="">Select Category</option>
+                  <option value="">Chọn danh mục</option>
                   {categories.map(cat => (
                     <option key={cat._id} value={cat._id}>{cat.name}</option>
                   ))}
@@ -251,11 +251,11 @@ const Products = () => {
             <input type="text" name="images" value={formData.images} onChange={handleInputChange} className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500" placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700">Short Description</label>
+                <label className="block text-sm font-medium text-slate-700">Mô tả ngắn</label>
                 <textarea name="shortDescription" value={formData.shortDescription} onChange={handleInputChange} rows="2" className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500"></textarea>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700">Description</label>
+                <label className="block text-sm font-medium text-slate-700">Mô tả</label>
                 <textarea name="description" value={formData.description} onChange={handleInputChange} rows="4" className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500"></textarea>
               </div>
               <div className="flex items-center space-x-4 mt-2">
@@ -319,7 +319,7 @@ const Products = () => {
             ))}
             {products.length === 0 && (
               <tr>
-                <td colSpan="5" className="px-6 py-4 text-center text-sm text-slate-500">No products found.</td>
+                <td colSpan="5" className="px-6 py-4 text-center text-sm text-slate-500">Không có sản phẩm nào.</td>
               </tr>
             )}
           </tbody>

@@ -127,13 +127,13 @@ const News = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">News</h1>
+        <h1 className="text-2xl font-bold text-slate-800">Tin Tức</h1>
         {!showForm && (
           <button 
             onClick={() => { resetForm(); setShowForm(true); }}
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded shadow"
           >
-            Add News
+            Thêm Tin Tức
           </button>
         )}
       </div>
@@ -168,8 +168,8 @@ const News = () => {
               <div>
                 <label className="block text-sm font-medium text-slate-700">Status</label>
                 <select name="status" value={formData.status} onChange={handleInputChange} className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500">
-                  <option value="draft">Draft</option>
-                  <option value="published">Published</option>
+                  <option value="draft">Nháp</option>
+                  <option value="published">Đã xuất bản</option>
                 </select>
               </div>
             </div>
@@ -205,7 +205,7 @@ const News = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${news.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                    {news.status}
+                    {news.status === 'published' ? 'Đã xuất bản' : 'Nháp'}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -217,7 +217,7 @@ const News = () => {
             ))}
             {newsList.length === 0 && (
               <tr>
-                <td colSpan="3" className="px-6 py-4 text-center text-sm text-slate-500">No news found.</td>
+                <td colSpan="3" className="px-6 py-4 text-center text-sm text-slate-500">Không có tin tức nào.</td>
               </tr>
             )}
           </tbody>

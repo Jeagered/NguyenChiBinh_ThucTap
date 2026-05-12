@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } from '../../utils/passwordPolicy';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -76,6 +77,11 @@ export default function Users() {
     const payload = { ...modalData };
     if (editingUser && !payload.password) {
       delete payload.password; // Không gửi mật khẩu nếu không thay đổi
+    }
+
+    if (payload.password && !isValidPassword(payload.password)) {
+      alert(PASSWORD_REQUIREMENT_MESSAGE);
+      return;
     }
 
     try {

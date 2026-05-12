@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import banner2 from '../../assets/banner2.png';
+import { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } from '../../utils/passwordPolicy';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -45,6 +46,11 @@ export default function Signup() {
 
     if (form.password !== form.confirmPassword) {
       setMessage('Mật khẩu xác nhận không khớp');
+      return;
+    }
+
+    if (!isValidPassword(form.password)) {
+      setMessage(PASSWORD_REQUIREMENT_MESSAGE);
       return;
     }
 
@@ -108,6 +114,9 @@ export default function Signup() {
             <Field label="Địa chỉ Email" type="email" value={form.email} onChange={updateField('email')} autoComplete="email" />
             <Field label="Tên người dùng mong muốn" value={form.username} onChange={updateField('username')} autoComplete="username" />
             <Field label="Mật khẩu" type="password" value={form.password} onChange={updateField('password')} autoComplete="new-password" />
+            <p className="-mt-3 text-xs font-semibold leading-5 text-slate-500">
+              Mật khẩu 6-20 ký tự, gồm chữ, số và ký tự đặc biệt.
+            </p>
             <Field label="Xác nhận mật khẩu" type="password" value={form.confirmPassword} onChange={updateField('confirmPassword')} autoComplete="new-password" />
 
             <label className="flex items-center gap-3 text-base font-bold text-slate-800">

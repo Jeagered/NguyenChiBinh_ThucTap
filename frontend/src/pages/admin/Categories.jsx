@@ -114,12 +114,12 @@ const Categories = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Categories</h1>
+        <h1 className="text-2xl font-bold text-slate-800">Danh Mục Sản Phẩm</h1>
         <button 
           onClick={() => { resetForm(); setShowForm(true); }}
           className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded shadow"
         >
-          Add Category
+          Thêm Danh Mục
         </button>
       </div>
 

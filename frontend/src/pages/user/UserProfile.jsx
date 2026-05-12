@@ -2,6 +2,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } from '../../utils/passwordPolicy';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -157,6 +158,11 @@ export default function UserProfile() {
       return;
     }
 
+    if (!isValidPassword(passwords.newPassword)) {
+      setError(PASSWORD_REQUIREMENT_MESSAGE);
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/auth/change-password`, {
         method: 'PUT',
@@ -275,6 +281,9 @@ export default function UserProfile() {
               <div className="space-y-5">
                 <TextField label="Mật khẩu hiện tại" type="password" value={passwords.currentPassword} onChange={updatePasswordField('currentPassword')} />
                 <TextField label="Mật khẩu mới" type="password" value={passwords.newPassword} onChange={updatePasswordField('newPassword')} />
+                <p className="-mt-3 text-xs font-semibold leading-5 text-slate-500">
+                  Mật khẩu 6-20 ký tự, gồm chữ, số và ký tự đặc biệt.
+                </p>
                 <TextField label="Xác nhận mật khẩu mới" type="password" value={passwords.confirmPassword} onChange={updatePasswordField('confirmPassword')} />
               </div>
               <button

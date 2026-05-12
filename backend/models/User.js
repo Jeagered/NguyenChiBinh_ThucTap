@@ -1,5 +1,6 @@
 ﻿﻿const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } = require('../utils/passwordPolicy');
 
 const addressSchema = new mongoose.Schema(
   {
@@ -27,7 +28,10 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Vui long nhap mat khau'],
-      minlength: [6, 'Mat khau toi thieu 6 ky tu'],
+      validate: {
+        validator: isValidPassword,
+        message: PASSWORD_REQUIREMENT_MESSAGE,
+      },
       select: false,
     },
     phone: { type: String, trim: true },

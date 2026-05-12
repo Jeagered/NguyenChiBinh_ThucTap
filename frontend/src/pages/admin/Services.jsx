@@ -121,12 +121,12 @@ const Services = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Services</h1>
+        <h1 className="text-2xl font-bold text-slate-800">Dịch Vụ</h1>
         <button 
           onClick={() => { resetForm(); setShowForm(true); }}
           className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded shadow"
         >
-          Add Service
+          Thêm Dịch Vụ
         </button>
       </div>
 
@@ -136,7 +136,7 @@ const Services = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700">Title</label>
+                <label className="block text-sm font-medium text-slate-700">Mô tả</label>
                 <input type="text" name="title" value={formData.title} onChange={handleInputChange} required className="mt-1 block w-full rounded-md border-slate-300 shadow-sm p-2 border focus:border-orange-500 focus:ring-orange-500" />
               </div>
               <div>
