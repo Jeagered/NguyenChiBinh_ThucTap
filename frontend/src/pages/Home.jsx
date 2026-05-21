@@ -5,8 +5,8 @@ import Footer from '../components/Footer';
 import banner1 from '../assets/banner1.png';
 import banner2 from '../assets/banner2.png';
 
-const API_URL = 'http://localhost:5000/api';
-const SERVER_URL = 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
 
 function getImageUrl(image, fallback) {
   if (!image) return fallback;
