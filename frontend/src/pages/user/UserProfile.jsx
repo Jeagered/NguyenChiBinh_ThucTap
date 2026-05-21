@@ -1,10 +1,10 @@
-﻿﻿﻿﻿﻿﻿import { useEffect, useState } from 'react';
+﻿﻿﻿﻿﻿﻿﻿﻿import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } from '../../utils/passwordPolicy';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const emptyAddress = {
   fullName: '',

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const Services = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,7 @@ const Services = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/services', {
+      const response = await fetch(`${API_URL}/services`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -68,7 +70,7 @@ const Services = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this service?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/services/${id}`, {
+      const response = await fetch(`${API_URL}/services/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -85,7 +87,7 @@ const Services = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = editId ? `http://localhost:5000/api/services/${editId}` : 'http://localhost:5000/api/services';
+    const url = editId ? `${API_URL}/services/${editId}` : `${API_URL}/services`;
     const method = editId ? 'PUT' : 'POST';
 
     try {

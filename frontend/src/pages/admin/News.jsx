@@ -2,10 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import RichTextEditor from '../../components/RichTextEditor';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+
 const getNewsImage = (image) => {
   if (!image) return 'https://via.placeholder.com/80';
   if (image.startsWith('http://') || image.startsWith('https://')) return image;
-  return `http://localhost:5000${image.startsWith('/') ? '' : '/'}${image}`;
+  return `${SERVER_URL}${image.startsWith('/') ? '' : '/'}${image}`;
 };
 
 const News = () => {
@@ -26,7 +29,7 @@ const News = () => {
 
   const fetchNews = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/news', {
+      const response = await fetch(`${API_URL}/news`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -74,7 +77,7 @@ const News = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this news article?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/news/${id}`, {
+      const response = await fetch(`${API_URL}/news/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -91,7 +94,7 @@ const News = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = editId ? `http://localhost:5000/api/news/${editId}` : 'http://localhost:5000/api/news';
+    const url = editId ? `${API_URL}/news/${editId}` : `${API_URL}/news`;
     const method = editId ? 'PUT' : 'POST';
 
     try {

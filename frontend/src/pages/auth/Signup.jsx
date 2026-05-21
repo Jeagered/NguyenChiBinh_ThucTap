@@ -1,11 +1,11 @@
-﻿import { useState } from 'react';
+﻿﻿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import banner2 from '../../assets/banner2.png';
 import { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } from '../../utils/passwordPolicy';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 function Field({ label, type = 'text', value, onChange, autoComplete }) {
   return (
@@ -154,5 +154,3 @@ export default function Signup() {
     </div>
   );
 }
-
-

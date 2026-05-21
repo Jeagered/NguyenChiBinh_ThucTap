@@ -1,11 +1,11 @@
-﻿﻿import { useEffect, useMemo, useState, useRef } from 'react';
+﻿﻿﻿﻿import { useEffect, useMemo, useState, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import fallbackProductImage from '../../assets/Product.png';
 
-const API_URL = 'http://localhost:5000/api';
-const SERVER_URL = 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
 const PRODUCTS_PER_PAGE = 12;
 
 function getProductImage(product) {

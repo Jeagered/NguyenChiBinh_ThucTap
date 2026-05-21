@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+
 const getProductImage = (images) => {
   if (!images || images.length === 0 || !images[0]) return 'https://via.placeholder.com/80';
   const image = images[0];
   if (image.startsWith('http://') || image.startsWith('https://')) return image;
-  return `http://localhost:5000${image.startsWith('/') ? '' : '/'}${image}`;
+  return `${SERVER_URL}${image.startsWith('/') ? '' : '/'}${image}`;
 };
 
 const Products = () => {
@@ -44,7 +47,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/products?page=${page}&limit=10&admin=true`, {
+      const response = await fetch(`${API_URL}/products?page=${page}&limit=10&admin=true`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -63,7 +66,7 @@ const Products = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/categories', {
+      const response = await fetch(`${API_URL}/categories`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -126,7 +129,7 @@ const Products = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const response = await fetch(`${API_URL}/products/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -143,7 +146,7 @@ const Products = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = editId ? `http://localhost:5000/api/products/${editId}` : 'http://localhost:5000/api/products';
+    const url = editId ? `${API_URL}/products/${editId}` : `${API_URL}/products`;
     const method = editId ? 'PUT' : 'POST';
 
     try {

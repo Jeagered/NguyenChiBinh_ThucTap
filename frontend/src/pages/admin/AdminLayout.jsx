@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const adminNavItems = [
   { label: 'Thống kê', path: '/admin' },
   { label: 'Người dùng', path: '/admin/users' },
@@ -22,7 +24,7 @@ export default function AdminLayout() {
       try {
         const token = localStorage.getItem('token');
         if (!token) return;
-        const res = await fetch('http://localhost:5000/api/chat/conversations', {
+        const res = await fetch(`${API_URL}/chat/conversations`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
