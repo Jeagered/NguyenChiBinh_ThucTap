@@ -22,25 +22,16 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-].filter(Boolean);
-
+// --- CẤU HÌNH CORS THEO CÁCH 1 (MỞ CHO VERCEL VÀ LOCALHOST) ---
 app.use(
   cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        return;
-      }
-
-      callback(new Error(`CORS blocked origin: ${origin}`));
-    },
-    credentials: true,
+    origin: '*', // Cho phép tất cả các domain (bao gồm mọi link Vercel) gọi tới API
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Các phương thức HTTP cho phép
+    allowedHeaders: ['Content-Type', 'Authorization'], // Các Header được chấp nhận khi FE gửi lên
   })
 );
+// -----------------------------------------------------------
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -85,4 +76,3 @@ const startServer = async () => {
 };
 
 startServer();
-
