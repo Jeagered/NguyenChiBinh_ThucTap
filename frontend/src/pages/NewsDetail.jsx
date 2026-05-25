@@ -95,7 +95,7 @@ export default function NewsDetail() {
         const data = await res.json();
 
         if (data.success) {
-          const found = data.data.find((news) => news._id === id || news.slug === id);
+          const found = data.data?.find((news) => news._id === id || news.slug === id);
           if (found) setArticle(found);
           else setError('Không tìm thấy bài viết.');
         } else {

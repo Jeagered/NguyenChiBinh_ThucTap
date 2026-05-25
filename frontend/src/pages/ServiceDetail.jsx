@@ -36,7 +36,7 @@ export default function ServiceDetail() {
         
         if (data.success) {
           // Tìm dịch vụ khớp với ID hoặc Slug trên URL
-          const foundService = data.data.find(s => s._id === id || s.slug === id);
+          const foundService = data.data?.find(s => s._id === id || s.slug === id);
           if (foundService) {
             setService(foundService);
           } else {

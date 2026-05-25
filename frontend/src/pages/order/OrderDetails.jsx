@@ -1,4 +1,4 @@
-﻿﻿﻿﻿import { useEffect, useState } from 'react';
+﻿﻿﻿﻿﻿﻿import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -108,9 +108,9 @@ export default function OrderDetails() {
             <div>
               <h3 className="text-sm font-black uppercase text-slate-900 mb-4 tracking-wider">Thông tin người nhận</h3>
               <div className="space-y-2 text-slate-700 text-sm font-medium">
-                <p><span className="text-slate-500 w-24 inline-block">Họ tên:</span> {order.shippingAddress.fullName}</p>
-                <p><span className="text-slate-500 w-24 inline-block">Điện thoại:</span> {order.shippingAddress.phone}</p>
-                <p><span className="text-slate-500 w-24 inline-block">Địa chỉ:</span> {order.shippingAddress.street}</p>
+                <p><span className="text-slate-500 w-24 inline-block">Họ tên:</span> {order.shippingAddress?.fullName || 'Không có'}</p>
+                <p><span className="text-slate-500 w-24 inline-block">Điện thoại:</span> {order.shippingAddress?.phone || 'Không có'}</p>
+                <p><span className="text-slate-500 w-24 inline-block">Địa chỉ:</span> {order.shippingAddress?.street || 'Không có'}</p>
               </div>
             </div>
             <div>
@@ -125,7 +125,7 @@ export default function OrderDetails() {
           <div className="p-6 sm:p-8">
             <h3 className="text-sm font-black uppercase text-slate-900 mb-6 tracking-wider">Sản phẩm đã đặt</h3>
             <ul className="divide-y divide-slate-100">
-              {order.items.map((item) => (
+              {order.items?.map((item) => (
                 <li key={item.product} className="py-4 flex items-center gap-4">
                   <img src={item.image || 'https://via.placeholder.com/80'} alt={item.name} className="w-20 h-20 object-cover rounded-md border border-slate-200" />
                   <div className="flex-1 min-w-0">
