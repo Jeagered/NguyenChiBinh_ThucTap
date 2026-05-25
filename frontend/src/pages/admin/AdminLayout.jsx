@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
 
 const adminNavItems = [
   { label: 'Thống kê', path: '/admin' },

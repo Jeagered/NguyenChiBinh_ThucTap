@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);

@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ChatBackground from '../../components/ChatBackground';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER.URL || 'http://localhost:5000';
 
 const formatMessageTime = (dateString) => {
   if (!dateString) return '';

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } from '../../utils/passwordPolicy';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
 
 export default function Users() {
   const navigate = useNavigate();
@@ -131,19 +132,30 @@ export default function Users() {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/users/${userId}/block`, {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` }
+        method: 'PATCH', // Lưu ý: Thử đổi thành 'PUT' nếu backend của bạn được cấu hình bằng app.put()
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        }
       });
-      const data = await res.json();
       
-      if (data.success) {
-        // Refresh users list
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        // Nếu backend Render trả về 404 HTML hoặc 500 HTML
+        throw new Error(`Máy chủ trả về phản hồi không hợp lệ (Mã lỗi: ${res.status} ${res.statusText})`);
+      }
+      
+      if (res.ok && data.success) {
+        // Cập nhật lại danh sách sau khi đổi trạng thái
         fetchUsers();
       } else {
-        alert(data.message || 'Lỗi khi cập nhật trạng thái');
+        alert(data.message || `Lỗi khi cập nhật trạng thái: ${res.status}`);
       }
     } catch (err) {
-      alert('Lỗi kết nối khi cập nhật trạng thái');
+      console.error("Lỗi toggle block:", err);
+      alert('Lỗi kết nối khi cập nhật trạng thái: ' + err.message);
     }
   };
 

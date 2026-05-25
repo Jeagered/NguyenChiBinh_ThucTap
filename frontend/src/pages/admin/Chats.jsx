@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
 
 const formatTime = (dateString) => {
   if (!dateString) return '';
@@ -63,7 +64,7 @@ export default function Chats() {
             >
               <div className="flex items-center gap-4 overflow-hidden">
                 <img 
-                  src={conv.userAvatar || `https://ui-avatars.com/api/?name=${conv.userName || 'User'}&background=random`} 
+                  src={conv.userAvatar || `https  ://ui-avatars.com/api/?name=${conv.userName || 'User'}&background=random`} 
                   alt={conv.userName} 
                   className="h-12 w-12 shrink-0 rounded-full object-cover border border-slate-200 shadow-sm group-hover:border-orange-300 transition"
                 />
