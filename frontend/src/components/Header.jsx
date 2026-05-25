@@ -2,6 +2,8 @@
 import { Link, NavLink } from 'react-router-dom';
 import banner1 from '../assets/banner1.png';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const navItems = [
   { label: 'Trang chủ', to: '/' },
   { label: 'Giới thiệu', to: '/about' },
@@ -75,7 +77,7 @@ function NavBar() {
         return;
       }
       try {
-        const res = await fetch('http://localhost:5000/api/cart', {
+        const res = await fetch(`${API_URL}/cart`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -112,7 +114,7 @@ function NavBar() {
       const token = localStorage.getItem('token');
       if (!token || user?.role === 'admin') return;
       try {
-        const res = await fetch('http://localhost:5000/api/chat?markRead=false', {
+        const res = await fetch(`${API_URL}/chat?markRead=false`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();

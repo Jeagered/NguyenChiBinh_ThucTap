@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: '*', // Cho phép tất cả các domain (bao gồm mọi link Vercel) gọi tới API
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Các phương thức HTTP cho phép
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // Các phương thức HTTP cho phép
     allowedHeaders: ['Content-Type', 'Authorization'], // Các Header được chấp nhận khi FE gửi lên
   })
 );
