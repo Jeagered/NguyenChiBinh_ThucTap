@@ -67,7 +67,6 @@ export default function Cart() {
       
       if (data.success) {
         setCartItems(data.data.items || []);
-        // Update header cart count event if necessary
         window.dispatchEvent(new Event('cart-updated'));
       } else {
         alert(data.message || 'Xóa sản phẩm thất bại');

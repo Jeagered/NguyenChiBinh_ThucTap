@@ -6,6 +6,7 @@ import banner2 from '../../assets/banner2.png';
 import { PASSWORD_REQUIREMENT_MESSAGE, isValidPassword } from '../../utils/passwordPolicy';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
 
 function Field({ label, type = 'text', value, onChange, autoComplete }) {
   return (
